@@ -24,7 +24,7 @@ describe("Decompressor", function () {
     const [addr1, addr2] = await ethers.getSigners()
     const chainId = (await ethers.provider.getNetwork()).chainId
 
-    const DecompressorExtMock = await ethers.getContractFactory("DecompressorExtensionMock")
+    const DecompressorExtMock = await ethers.getContractFactory("OneInchDecompressorMock")
     const decompressorExt = await DecompressorExtMock.deploy()
     await decompressorExt.waitForDeployment()
 
