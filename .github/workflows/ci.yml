@@ -7,6 +7,7 @@ on:
 
 env:
   FOUNDRY_PROFILE: ci
+  CARGO_TEAM_COLOR: always
 
 jobs:
   run-ci:
@@ -16,7 +17,21 @@ jobs:
         node-version: [20.x]
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
           version: 8
 
