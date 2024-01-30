@@ -1,2 +1,3 @@
-TestContract:testBar() (gas: 351)
-TestContract:testFoo(uint256) (runs: 1024, μ: 3364, ~: 3364)
+TestContract:testAbiEncode() (gas: 1804767)
+TestContract:testFuzz(bytes) (runs: 1024, μ: 3452, ~: 3452)
+TestContract:testHexEncode() (gas: 431033)

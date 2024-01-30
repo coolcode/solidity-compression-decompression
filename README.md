@@ -1,6 +1,4 @@
-# <h1 align="center"> Forge Template </h1>
-
-**A Foundry template for rapidly initializing a Solidity project.**
+# <h1 align="center"> Solidity Encoding Comparision </h1>
 
 ![Github Actions](https://github.com/coolcode/solidity-encoding-comparision/workflows/CI/badge.svg)
 
@@ -11,3 +9,9 @@ forge build
 forge test
 ```
 
+Use Hardhat:
+
+```sh
+pnpm install
+pnpm test
+```

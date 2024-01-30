@@ -69,11 +69,7 @@ library InflateLib {
         uint256[] symbols;
     }
 
-    function bits(State memory s, uint256 need)
-        private
-        pure
-        returns (ErrorCode, uint256)
-    {
+    function bits(State memory s, uint256 need) private pure returns (ErrorCode, uint256) {
         // Bit accumulator (can use up to 20 bits)
         uint256 val;
 
@@ -115,10 +111,7 @@ library InflateLib {
         len = uint256(uint8(s.input[s.incnt++]));
         len |= uint256(uint8(s.input[s.incnt++])) << 8;
 
-        if (
-            uint8(s.input[s.incnt++]) != (~len & 0xFF) ||
-            uint8(s.input[s.incnt++]) != ((~len >> 8) & 0xFF)
-        ) {
+        if (uint8(s.input[s.incnt++]) != (~len & 0xFF) || uint8(s.input[s.incnt++]) != ((~len >> 8) & 0xFF)) {
             // Didn't match complement!
             return ErrorCode.ERR_STORED_LENGTH_NO_MATCH;
         }
@@ -142,11 +135,7 @@ library InflateLib {
         return ErrorCode.ERR_NONE;
     }
 
-    function _decode(State memory s, Huffman memory h)
-        private
-        pure
-        returns (ErrorCode, uint256)
-    {
+    function _decode(State memory s, Huffman memory h) private pure returns (ErrorCode, uint256) {
         // Current number of bits in code
         uint256 len;
         // Len bits being decoded
@@ -185,12 +174,11 @@ library InflateLib {
         return (ErrorCode.ERR_INVALID_LENGTH_OR_DISTANCE_CODE, 0);
     }
 
-    function _construct(
-        Huffman memory h,
-        uint256[] memory lengths,
-        uint256 n,
-        uint256 start
-    ) private pure returns (ErrorCode) {
+    function _construct(Huffman memory h, uint256[] memory lengths, uint256 n, uint256 start)
+        private
+        pure
+        returns (ErrorCode)
+    {
         // Current symbol when stepping through lengths[]
         uint256 symbol;
         // Current length when stepping through h.counts[]
@@ -248,11 +236,7 @@ library InflateLib {
         return left > 0 ? ErrorCode.ERR_CONSTRUCT : ErrorCode.ERR_NONE;
     }
 
-    function _codes(
-        State memory s,
-        Huffman memory lencode,
-        Huffman memory distcode
-    ) private pure returns (ErrorCode) {
+    function _codes(State memory s, Huffman memory lencode, Huffman memory distcode) private pure returns (ErrorCode) {
         // Decoded symbol
         uint256 symbol;
         // Length for copy
@@ -261,139 +245,75 @@ library InflateLib {
         uint256 dist;
         // TODO Solidity doesn't support constant arrays, but these are fixed at compile-time
         // Size base for length codes 257..285
-        uint16[29] memory lens =
-            [
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                13,
-                15,
-                17,
-                19,
-                23,
-                27,
-                31,
-                35,
-                43,
-                51,
-                59,
-                67,
-                83,
-                99,
-                115,
-                131,
-                163,
-                195,
-                227,
-                258
-            ];
+        uint16[29] memory lens = [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            15,
+            17,
+            19,
+            23,
+            27,
+            31,
+            35,
+            43,
+            51,
+            59,
+            67,
+            83,
+            99,
+            115,
+            131,
+            163,
+            195,
+            227,
+            258
+        ];
         // Extra bits for length codes 257..285
-        uint8[29] memory lext =
-            [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                1,
-                1,
-                1,
-                2,
-                2,
-                2,
-                2,
-                3,
-                3,
-                3,
-                3,
-                4,
-                4,
-                4,
-                4,
-                5,
-                5,
-                5,
-                5,
-                0
-            ];
+        uint8[29] memory lext = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0];
         // Offset base for distance codes 0..29
-        uint16[30] memory dists =
-            [
-                1,
-                2,
-                3,
-                4,
-                5,
-                7,
-                9,
-                13,
-                17,
-                25,
-                33,
-                49,
-                65,
-                97,
-                129,
-                193,
-                257,
-                385,
-                513,
-                769,
-                1025,
-                1537,
-                2049,
-                3073,
-                4097,
-                6145,
-                8193,
-                12289,
-                16385,
-                24577
-            ];
+        uint16[30] memory dists = [
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            9,
+            13,
+            17,
+            25,
+            33,
+            49,
+            65,
+            97,
+            129,
+            193,
+            257,
+            385,
+            513,
+            769,
+            1025,
+            1537,
+            2049,
+            3073,
+            4097,
+            6145,
+            8193,
+            12289,
+            16385,
+            24577
+        ];
         // Extra bits for distance codes 0..29
         uint8[30] memory dext =
-            [
-                0,
-                0,
-                0,
-                0,
-                1,
-                1,
-                2,
-                2,
-                3,
-                3,
-                4,
-                4,
-                5,
-                5,
-                6,
-                6,
-                7,
-                7,
-                8,
-                8,
-                9,
-                9,
-                10,
-                10,
-                11,
-                11,
-                12,
-                12,
-                13,
-                13
-            ];
+            [0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13];
         // Error code
         ErrorCode err;
 
@@ -501,11 +421,7 @@ library InflateLib {
         return _codes(s, s.lencode, s.distcode);
     }
 
-    function _build_dynamic_lengths(State memory s)
-        private
-        pure
-        returns (ErrorCode, uint256[] memory)
-    {
+    function _build_dynamic_lengths(State memory s) private pure returns (ErrorCode, uint256[] memory) {
         uint256 ncode;
         // Index of lengths[]
         uint256 index;
@@ -514,8 +430,7 @@ library InflateLib {
         // Error code
         ErrorCode err;
         // Permutation of code length codes
-        uint8[19] memory order =
-            [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        uint8[19] memory order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
         (err, ncode) = bits(s, 4);
         if (err != ErrorCode.ERR_NONE) {
@@ -537,15 +452,7 @@ library InflateLib {
         return (ErrorCode.ERR_NONE, lengths);
     }
 
-    function _build_dynamic(State memory s)
-        private
-        pure
-        returns (
-            ErrorCode,
-            Huffman memory,
-            Huffman memory
-        )
-    {
+    function _build_dynamic(State memory s) private pure returns (ErrorCode, Huffman memory, Huffman memory) {
         // Number of lengths in descriptor
         uint256 nlen;
         uint256 ndist;
@@ -556,10 +463,8 @@ library InflateLib {
         // Descriptor code lengths
         uint256[] memory lengths = new uint256[](MAXCODES);
         // Length and distance codes
-        Huffman memory lencode =
-            Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXLCODES));
-        Huffman memory distcode =
-            Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXDCODES));
+        Huffman memory lencode = Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXLCODES));
+        Huffman memory distcode = Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXDCODES));
         uint256 tempBits;
 
         // Get number of lengths in each table, check lengths
@@ -576,11 +481,7 @@ library InflateLib {
 
         if (nlen > MAXLCODES || ndist > MAXDCODES) {
             // Bad counts
-            return (
-                ErrorCode.ERR_TOO_MANY_LENGTH_OR_DISTANCE_CODES,
-                lencode,
-                distcode
-            );
+            return (ErrorCode.ERR_TOO_MANY_LENGTH_OR_DISTANCE_CODES, lencode, distcode);
         }
 
         (err, lengths) = _build_dynamic_lengths(s);
@@ -592,11 +493,7 @@ library InflateLib {
         err = _construct(lencode, lengths, 19, 0);
         if (err != ErrorCode.ERR_NONE) {
             // Require complete code set here
-            return (
-                ErrorCode.ERR_CODE_LENGTHS_CODES_INCOMPLETE,
-                lencode,
-                distcode
-            );
+            return (ErrorCode.ERR_CODE_LENGTHS_CODES_INCOMPLETE, lencode, distcode);
         }
 
         // Read length/literal and distance code length tables
@@ -624,11 +521,7 @@ library InflateLib {
                     // Repeat last length 3..6 times
                     if (index == 0) {
                         // No last length!
-                        return (
-                            ErrorCode.ERR_REPEAT_NO_FIRST_LENGTH,
-                            lencode,
-                            distcode
-                        );
+                        return (ErrorCode.ERR_REPEAT_NO_FIRST_LENGTH, lencode, distcode);
                     }
                     // Last length
                     len = lengths[index - 1];
@@ -675,33 +568,27 @@ library InflateLib {
         // Build huffman table for literal/length codes
         err = _construct(lencode, lengths, nlen, 0);
         if (
-            err != ErrorCode.ERR_NONE &&
-            (err == ErrorCode.ERR_NOT_TERMINATED ||
-                err == ErrorCode.ERR_OUTPUT_EXHAUSTED ||
-                nlen != lencode.counts[0] + lencode.counts[1])
+            err != ErrorCode.ERR_NONE
+                && (
+                    err == ErrorCode.ERR_NOT_TERMINATED || err == ErrorCode.ERR_OUTPUT_EXHAUSTED
+                        || nlen != lencode.counts[0] + lencode.counts[1]
+                )
         ) {
             // Incomplete code ok only for single length 1 code
-            return (
-                ErrorCode.ERR_INVALID_LITERAL_LENGTH_CODE_LENGTHS,
-                lencode,
-                distcode
-            );
+            return (ErrorCode.ERR_INVALID_LITERAL_LENGTH_CODE_LENGTHS, lencode, distcode);
         }
 
         // Build huffman table for distance codes
         err = _construct(distcode, lengths, ndist, nlen);
         if (
-            err != ErrorCode.ERR_NONE &&
-            (err == ErrorCode.ERR_NOT_TERMINATED ||
-                err == ErrorCode.ERR_OUTPUT_EXHAUSTED ||
-                ndist != distcode.counts[0] + distcode.counts[1])
+            err != ErrorCode.ERR_NONE
+                && (
+                    err == ErrorCode.ERR_NOT_TERMINATED || err == ErrorCode.ERR_OUTPUT_EXHAUSTED
+                        || ndist != distcode.counts[0] + distcode.counts[1]
+                )
         ) {
             // Incomplete code ok only for single length 1 code
-            return (
-                ErrorCode.ERR_INVALID_DISTANCE_CODE_LENGTHS,
-                lencode,
-                distcode
-            );
+            return (ErrorCode.ERR_INVALID_DISTANCE_CODE_LENGTHS, lencode, distcode);
         }
 
         return (ErrorCode.ERR_NONE, lencode, distcode);
@@ -723,23 +610,22 @@ library InflateLib {
         return _codes(s, lencode, distcode);
     }
 
-    function puff(bytes calldata source, uint256 destlen)
-        external
-        pure
-        returns (ErrorCode, bytes memory)
-    {
+    function puffEncode(bytes calldata source, uint256 destlen) external pure returns (bytes memory res) {
+        (, res) = puff(source, destlen);
+    }
+
+    function puff(bytes calldata source, uint256 destlen) internal pure returns (ErrorCode, bytes memory) {
         // Input/output state
-        State memory s =
-            State(
-                new bytes(destlen),
-                0,
-                source,
-                0,
-                0,
-                0,
-                Huffman(new uint256[](MAXBITS + 1), new uint256[](FIXLCODES)),
-                Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXDCODES))
-            );
+        State memory s = State(
+            new bytes(destlen),
+            0,
+            source,
+            0,
+            0,
+            0,
+            Huffman(new uint256[](MAXBITS + 1), new uint256[](FIXLCODES)),
+            Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXDCODES))
+        );
         // Temp: last bit
         uint256 last;
         // Temp: block type bit
@@ -767,19 +653,8 @@ library InflateLib {
                 return (err, s.output);
             }
 
-            err = (
-                t == 0
-                    ? _stored(s)
-                    : (
-                        t == 1
-                            ? _fixed(s)
-                            : (
-                                t == 2
-                                    ? _dynamic(s)
-                                    : ErrorCode.ERR_INVALID_BLOCK_TYPE
-                            )
-                    )
-            );
+            err =
+                (t == 0 ? _stored(s) : (t == 1 ? _fixed(s) : (t == 2 ? _dynamic(s) : ErrorCode.ERR_INVALID_BLOCK_TYPE)));
             // type == 3, invalid
 
             if (err != ErrorCode.ERR_NONE) {

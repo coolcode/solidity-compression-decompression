@@ -28,7 +28,7 @@ contract TestContract is Test {
         bytes memory abiEncoded = abi.encode(longBytes);
         bytes memory abiEncodePacked = abi.encodePacked(longBytes);
         bytes memory rlpEncoded = longBytes.rlpEncode();
-        (, bytes memory puffEncoded) = longBytes.puff(longBytes.length);
+        bytes memory puffEncoded = longBytes.puffEncode(longBytes.length);
         logBytes(abiEncoded);
         logBytes(abiEncodePacked);
         logBytes(rlpEncoded);

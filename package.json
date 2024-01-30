@@ -1,0 +1,21 @@
+{
+  "name": "forge-openzeppelin-hardhat-template",
+  "version": "1.0.0",
+  "description": "A Foundry template for rapidly initializing a Solidity project with openzeppelin & hardhat.",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "task": "hardhat balance --account 1",
+    "check": "hardhat test --typecheck"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-foundry": "^1.1.1",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.4"
+  }
+}
