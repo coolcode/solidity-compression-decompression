@@ -1,0 +1,151 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/b/c/demo/solidity-encoding-comparision/src/InflateLib.sol": {
+      "lastModificationDate": 1706585924902,
+      "contentHash": "75816543fd644f54986badf3db0cbfd5",
+      "sourceName": "src/InflateLib.sol",
+      "solcConfig": {
+        "version": "0.8.23",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "InflateLib"
+      ]
+    },
+    "/Users/b/c/demo/solidity-encoding-comparision/src/RLPLib.sol": {
+      "lastModificationDate": 1706538907722,
+      "contentHash": "84ce5c07bdf9f7e0eb548a0844fd9528",
+      "sourceName": "src/RLPLib.sol",
+      "solcConfig": {
+        "version": "0.8.23",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./RLPReader.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "RLPLib"
+      ]
+    },
+    "/Users/b/c/demo/solidity-encoding-comparision/src/RLPReader.sol": {
+      "lastModificationDate": 1706538552458,
+      "contentHash": "0b6032fc9ceeeb13b2798b8d5ec2d85c",
+      "sourceName": "src/RLPReader.sol",
+      "solcConfig": {
+        "version": "0.8.23",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "RLPReader"
+      ]
+    },
+    "/Users/b/c/demo/solidity-encoding-comparision/src/StringLib.sol": {
+      "lastModificationDate": 1706538559266,
+      "contentHash": "49afbe7de2e2e9bcfb48442065ede249",
+      "sourceName": "src/StringLib.sol",
+      "solcConfig": {
+        "version": "0.8.23",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "StringLib"
+      ]
+    }
+  }
+}

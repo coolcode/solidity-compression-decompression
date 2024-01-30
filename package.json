@@ -1,7 +1,7 @@
 {
-  "name": "forge-openzeppelin-hardhat-template",
+  "name": "solidity-encoding-comparision",
   "version": "1.0.0",
-  "description": "A Foundry template for rapidly initializing a Solidity project with openzeppelin & hardhat.",
+  "description": "",
   "directories": {
     "lib": "lib",
     "test": "test"
