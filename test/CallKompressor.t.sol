@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import { FFIHarness } from "./utils/FFIHarness.sol";
 import { CallKompressor } from "src/CallKompressor.sol";

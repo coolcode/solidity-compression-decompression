@@ -25,5 +25,5 @@ pnpm test
 
 ## Refs
 
-- https://github.com/1inch/calldata-compressor
-- https://github.com/clabby/op-kompressor
+- [1inch Compression](https://github.com/1inch/calldata-compressor)
+- [ZeroKompressed](https://github.com/clabby/op-kompressor)
