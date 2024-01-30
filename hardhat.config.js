@@ -1,6 +1,6 @@
 require("@nomicfoundation/hardhat-foundry")
 require("@nomicfoundation/hardhat-toolbox")
-require("@typechain/hardhat")
+// require("@typechain/hardhat")
 
 module.exports = {
   solidity: {

@@ -5,7 +5,7 @@ pragma solidity 0.8.23;
 import { Token } from "./Token.sol";
 import { OneInchDecompressor } from "src/OneInchDecompressor.sol";
 
-contract OneInchDecompressorMock is Token, OneInchDecompressor {
+contract MockOneInchDecompressor is Token, OneInchDecompressor {
     fallback() external { }
 
     function setData(uint256 offset, bytes32 data) external onlyOwner {
