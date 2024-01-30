@@ -15,3 +15,7 @@ Use Hardhat:
 pnpm install
 pnpm test
 ```
+
+## Refs
+
+- https://github.com/1inch/calldata-compressor
