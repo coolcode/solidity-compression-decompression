@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import { Test, console } from "forge-std/Test.sol";
-import { StringLib } from "src/StringLib.sol";
-import { RLPLib } from "src/RLPLib.sol";
-import { InflateLib } from "src/InflateLib.sol";
+import { StringLib } from "src/lib/StringLib.sol";
+import { RLPLib } from "src/lib/RLPLib.sol";
+import { InflateLib } from "src/lib/InflateLib.sol";
 
 contract TestContract is Test {
     using StringLib for bytes;

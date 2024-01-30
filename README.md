@@ -1,8 +1,15 @@
 # <h1 align="center"> Solidity Encoding Comparision </h1>
 
-![Github Actions](https://github.com/coolcode/solidity-encoding-comparision/workflows/CI/badge.svg)
+![Github Actions](https://github.com/coolcode/solidity-compression-decompression/workflows/CI/badge.svg)
 
 ## Getting Started
+
+You need rust
+
+```sh
+cd diff
+cargo build --release
+```
 
 ```sh
 forge build
@@ -19,3 +26,4 @@ pnpm test
 ## Refs
 
 - https://github.com/1inch/calldata-compressor
+- https://github.com/clabby/op-kompressor

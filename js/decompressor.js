@@ -2,14 +2,16 @@ const hre = require("hardhat")
 const { ethers } = hre
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers")
 const { expect } = require("chai")
-const { trim0x, ether } = require("../js/common")
-const { compress } = require("../js/compressor.js")
+const { trim0x, ether } = require("./common")
+const { compress } = require("./compressor")
 
 const CALLDATAS_LIMIT = 5
+const CALLDATAS_DICT = "./dict-calldata.json"
+const CALLDATAS_TX = "./tx-calldata.json"
 
 let popularCalldatas = []
 try {
-  popularCalldatas = require("./dict.json")
+  popularCalldatas = require(CALLDATAS_DICT)
 } catch (e) {}
 
 function calldataCost(calldata) {
@@ -19,12 +21,77 @@ function calldataCost(calldata) {
   return BigInt(zeroBytesCount * 4 + nonZeroBytesCount * 16)
 }
 
-describe("Decompressor", function () {
+const SetData = (contractName) => {
   async function initContracts() {
     const [addr1, addr2] = await ethers.getSigners()
     const chainId = (await ethers.provider.getNetwork()).chainId
 
-    const DecompressorExtMock = await ethers.getContractFactory("OneInchDecompressorMock")
+    const DecompressorExtMock = await ethers.getContractFactory(contractName)
+    const decompressorExt = await DecompressorExtMock.deploy()
+    await decompressorExt.waitForDeployment()
+
+    return { addr1, addr2, decompressorExt, chainId }
+  }
+
+  describe("Setup _dict", () => {
+    it("shouldn't set data to reserved offset in dict", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      await expect(decompressorExt.setData(0, ethers.zeroPadValue("0x01", 32))).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
+    })
+
+    it("shouldn't set data array to reserved offset in dict", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
+      await expect(decompressorExt.setDataArray(0, dict)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
+    })
+
+    it("shouldn't get data from reserved offset in dict", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      await expect(decompressorExt.getData(0, 2)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
+      await expect(decompressorExt.getData(1, 2)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
+    })
+
+    it("shouldn't set data beyond the size of the dict.", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      await expect(decompressorExt.setData(await decompressorExt.MAX_DICT_LEN(), ethers.zeroPadValue("0x01", 32))).to.be.revertedWithCustomError(
+        decompressorExt,
+        "IncorrectDictAccess"
+      )
+    })
+
+    it("shouldn't set data array beyond the size of the dict.", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
+      const maxDictLen = await decompressorExt.MAX_DICT_LEN()
+      await expect(decompressorExt.setDataArray(maxDictLen - 1n, dict)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
+    })
+
+    it("should set data to dict and get it", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      await decompressorExt.setData(2, ethers.zeroPadValue("0x01", 32))
+      expect(await decompressorExt.getData(2, 3)).to.deep.equal(["0x0000000000000000000000000000000000000000000000000000000000000001"])
+    })
+
+    it("should set data array to dict and get it", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
+      await decompressorExt.setDataArray(2, dict)
+      expect(await decompressorExt.getData(2, 5)).to.deep.equal(dict)
+    })
+
+    it("should return empty dict when begin more than end", async () => {
+      const { decompressorExt } = await loadFixture(initContracts)
+      expect(await decompressorExt.getData(5, 4)).to.deep.equal([])
+    })
+  })
+}
+
+const Decompressor = (contractName) => {
+  async function initContracts() {
+    const [addr1, addr2] = await ethers.getSigners()
+    const chainId = (await ethers.provider.getNetwork()).chainId
+
+    const DecompressorExtMock = await ethers.getContractFactory(contractName)
     const decompressorExt = await DecompressorExtMock.deploy()
     await decompressorExt.waitForDeployment()
 
@@ -55,9 +122,9 @@ describe("Decompressor", function () {
 
     let calldatas = {}
     try {
-      calldatas = require("./tx-calldata.json")
+      calldatas = require(CALLDATAS_TX)
     } catch (e) {
-      console.warn("\x1b[33m%s\x1b[0m", "Warning: ", "There is no tx-calldata.json")
+      console.warn("\x1b[33m%s\x1b[0m", "Warning: ", "There is no", CALLDATAS_TX)
     }
 
     return { addr1, decompressorExt, chainId, calldatas }
@@ -85,8 +152,8 @@ describe("Decompressor", function () {
     return await compress(calldata, decompressorExt, wallet.address, popularCalldatas.length)
   }
 
-  describe("Compress and decompress", function () {
-    it("calc compress", async function () {
+  describe("Compress and decompress", () => {
+    it("calc compress", async () => {
       if (hre.__SOLIDITY_COVERAGE_RUNNING) {
         this.skip()
       }
@@ -105,7 +172,7 @@ describe("Decompressor", function () {
       console.log("averageZipPower =", averageZipPower / counter)
     })
 
-    it("should decompress without calldata", async function () {
+    it("should decompress without calldata", async () => {
       const { decompressorExt } = await loadFixture(initContractsWithDict)
       const decompressedCalldata = await ethers.provider.call({
         to: decompressorExt,
@@ -114,7 +181,7 @@ describe("Decompressor", function () {
       expect(ethers.AbiCoder.defaultAbiCoder().decode(["bytes"], decompressedCalldata)).to.deep.eq(["0x"])
     })
 
-    it("should decompress zero bytes", async function () {
+    it("should decompress zero bytes", async () => {
       const { addr1, decompressorExt } = await loadFixture(initContractsWithDict)
       const calldata = "0x00000000"
       const result = await compress(calldata, decompressorExt, addr1.address, popularCalldatas.length)
@@ -125,7 +192,7 @@ describe("Decompressor", function () {
       expect(ethers.AbiCoder.defaultAbiCoder().decode(["bytes"], decompressedCalldata)).to.deep.eq([calldata])
     })
 
-    it("should decompress random bytes", async function () {
+    it("should decompress random bytes", async () => {
       const { addr1, decompressorExt } = await loadFixture(initContractsWithDict)
       const calldata = "0xabaabbcc0102"
       const result = await compress(calldata, decompressorExt, addr1.address, popularCalldatas.length)
@@ -136,7 +203,7 @@ describe("Decompressor", function () {
       expect(ethers.AbiCoder.defaultAbiCoder().decode(["bytes"], decompressedCalldata)).to.deep.eq([calldata])
     })
 
-    it("should decompress calldatas with all cases", async function () {
+    it("should decompress calldatas with all cases", async () => {
       if (hre.__SOLIDITY_COVERAGE_RUNNING) {
         this.skip()
       }
@@ -155,60 +222,8 @@ describe("Decompressor", function () {
     })
   })
 
-  describe("Setup _dict", function () {
-    it("shouldn't set data to reserved offset in dict", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      await expect(decompressorExt.setData(0, ethers.zeroPadValue("0x01", 32))).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
-    })
-
-    it("shouldn't set data array to reserved offset in dict", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
-      await expect(decompressorExt.setDataArray(0, dict)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
-    })
-
-    it("shouldn't get data from reserved offset in dict", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      await expect(decompressorExt.getData(0, 2)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
-      await expect(decompressorExt.getData(1, 2)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
-    })
-
-    it("shouldn't set data beyond the size of the dict.", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      await expect(decompressorExt.setData(await decompressorExt.MAX_DICT_LEN(), ethers.zeroPadValue("0x01", 32))).to.be.revertedWithCustomError(
-        decompressorExt,
-        "IncorrectDictAccess"
-      )
-    })
-
-    it("shouldn't set data array beyond the size of the dict.", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
-      const maxDictLen = await decompressorExt.MAX_DICT_LEN()
-      await expect(decompressorExt.setDataArray(maxDictLen - 1n, dict)).to.be.revertedWithCustomError(decompressorExt, "IncorrectDictAccess")
-    })
-
-    it("should set data to dict and get it", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      await decompressorExt.setData(2, ethers.zeroPadValue("0x01", 32))
-      expect(await decompressorExt.getData(2, 3)).to.deep.equal(["0x0000000000000000000000000000000000000000000000000000000000000001"])
-    })
-
-    it("should set data array to dict and get it", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      const dict = [ethers.zeroPadValue("0x01", 32), ethers.zeroPadValue("0x02", 32), ethers.zeroPadValue("0x03", 32)]
-      await decompressorExt.setDataArray(2, dict)
-      expect(await decompressorExt.getData(2, 5)).to.deep.equal(dict)
-    })
-
-    it("should return empty dict when begin more than end", async function () {
-      const { decompressorExt } = await loadFixture(initContracts)
-      expect(await decompressorExt.getData(5, 4)).to.deep.equal([])
-    })
-  })
-
-  describe("Real-world", function () {
-    it("ERC20 transfer via decompressor", async function () {
+  describe("Real-world", () => {
+    it("ERC20 transfer via decompressor", async () => {
       const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMint)
 
       const calldata = await generateCompressedCalldata(decompressorExt, "transfer", [addr2.address, ether("1")], addr1)
@@ -220,7 +235,7 @@ describe("Decompressor", function () {
       ).to.changeTokenBalances(decompressorExt, [addr1, addr2], [-ether("1"), ether("1")])
     })
 
-    it("ERC20 approve via decompressor", async function () {
+    it("ERC20 approve via decompressor", async () => {
       const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMint)
 
       const calldata = await generateCompressedCalldata(decompressorExt, "approve", [addr2.address, ether("1")], addr1)
@@ -231,7 +246,7 @@ describe("Decompressor", function () {
       expect(await decompressorExt.allowance(addr1, addr2)).to.equal(ether("1"))
     })
 
-    it("ERC20 transferFrom via decompressor", async function () {
+    it("ERC20 transferFrom via decompressor", async () => {
       const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMintAndApprove)
 
       const calldata = await generateCompressedCalldata(decompressorExt, "transferFrom", [addr2.address, addr1.address, ether("1")], addr1)
@@ -244,15 +259,15 @@ describe("Decompressor", function () {
     })
   })
 
-  describe("Gas usage", function () {
-    before(function () {
+  describe("Gas usage", () => {
+    before(() => {
       if (hre.__SOLIDITY_COVERAGE_RUNNING) {
         this.skip()
       }
     })
 
-    describe("Calldata cost", function () {
-      it("custom calldatas", async function () {
+    describe("Calldata cost", () => {
+      it("custom calldatas", async () => {
         const { addr1, decompressorExt, calldatas } = await loadFixture(initContractsAndLoadCalldatas)
 
         let counter = 0
@@ -267,7 +282,7 @@ describe("Decompressor", function () {
         }
       })
 
-      it("ERC20 transfer", async function () {
+      it("ERC20 transfer", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDict)
         const calldata = await generateCompressedCalldata(decompressorExt, "transfer", [addr2.address, ether("1")], addr1)
         const uncompressedCost = calldataCost(calldata.uncompressedData)
@@ -276,7 +291,7 @@ describe("Decompressor", function () {
         expect(uncompressedCost).to.gt(compressedCost)
       })
 
-      it("ERC20 approve", async function () {
+      it("ERC20 approve", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDict)
         const calldata = await generateCompressedCalldata(decompressorExt, "approve", [addr2.address, ether("1")], addr1)
         const uncompressedCost = calldataCost(calldata.uncompressedData)
@@ -285,7 +300,7 @@ describe("Decompressor", function () {
         expect(uncompressedCost).to.gt(compressedCost)
       })
 
-      it("ERC20 transferFrom", async function () {
+      it("ERC20 transferFrom", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDict)
         const calldata = await generateCompressedCalldata(decompressorExt, "transferFrom", [addr2.address, addr1.address, ether("1")], addr1)
         const uncompressedCost = calldataCost(calldata.uncompressedData)
@@ -295,8 +310,8 @@ describe("Decompressor", function () {
       })
     })
 
-    describe("Runtime cost", function () {
-      it("custom calldatas", async function () {
+    describe("Runtime cost", () => {
+      it("custom calldatas", async () => {
         const { addr1, decompressorExt, calldatas } = await loadFixture(initContractsAndLoadCalldatas)
 
         let counter = 0
@@ -313,7 +328,7 @@ describe("Decompressor", function () {
         }
       })
 
-      it("ERC20 transfer", async function () {
+      it("ERC20 transfer", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMint)
 
         // regular erc20 transfer
@@ -334,7 +349,7 @@ describe("Decompressor", function () {
         expect(regularRuntime).to.lt(decompressorRuntime)
       })
 
-      it("ERC20 approve", async function () {
+      it("ERC20 approve", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMint)
 
         // warmup allowance
@@ -358,7 +373,7 @@ describe("Decompressor", function () {
         expect(regularRuntime).to.lt(decompressorRuntime)
       })
 
-      it("ERC20 transferFrom", async function () {
+      it("ERC20 transferFrom", async () => {
         const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMintAndApprove)
 
         // regular erc20 transferFrom
@@ -380,4 +395,6 @@ describe("Decompressor", function () {
       })
     })
   })
-})
+}
+
+module.exports = { SetData, Decompressor }

@@ -3,7 +3,7 @@
 pragma solidity 0.8.23;
 
 import { Token } from "./Token.sol";
-import { OneInchDecompressor } from "../OneInchDecompressor.sol";
+import { OneInchDecompressor } from "src/OneInchDecompressor.sol";
 
 contract OneInchDecompressorMock is Token, OneInchDecompressor {
     fallback() external { }
