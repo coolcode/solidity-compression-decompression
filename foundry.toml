@@ -5,9 +5,7 @@ libs = ["lib"]
 verbosity = 3
 optimizer = true
 optimizer_runs = 20_000
-remappings = [
-  
-]
+remappings = ['@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/']
 
 [fuzz]
 runs = 1024
