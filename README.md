@@ -1,4 +1,4 @@
-# <h1 align="center"> Solidity Encoding Comparision </h1>
+# <h1 align="center"> Solidity Compression & Decompression </h1>
 
 ![Github Actions](https://github.com/coolcode/solidity-compression-decompression/workflows/CI/badge.svg)
 

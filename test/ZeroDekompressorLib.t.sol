@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import { FFIHarness } from "./utils/FFIHarness.sol";
-import { MockDekompressor } from "./mocks/MockDekompressor.sol";
+import { MockDekompressor } from "src/mocks/MockDekompressor.sol";
 
 contract ZeroDekompressorLib_Test is FFIHarness {
     MockDekompressor mockDekompressor;

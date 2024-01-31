@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity 0.8.23;
+pragma solidity ^0.8.20;
 
 import { Token } from "./Token.sol";
 import { OneInchDecompressor } from "src/OneInchDecompressor.sol";

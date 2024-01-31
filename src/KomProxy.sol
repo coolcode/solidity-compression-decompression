@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
-import { ZeroDekompressorLib } from "./lib/ZeroDekompressorLib.sol";
+import { ZeroDekompressorLib } from "src/lib/ZeroDekompressorLib.sol";
 
 /// @title KomProxy
 /// @author clabby <https://github.com/clabby>
