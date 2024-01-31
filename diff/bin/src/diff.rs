@@ -24,6 +24,8 @@ struct Args {
 enum Mode {
     ZeroKompress,
     ZeroDekompress,
+    OneCompress,
+    OneDecompress,
 }
 
 impl From<String> for Mode {
@@ -31,6 +33,8 @@ impl From<String> for Mode {
         match s.as_str() {
             "zero-kompress" => Mode::ZeroKompress,
             "zero-dekompress" => Mode::ZeroDekompress,
+            "one-compress" => Mode::OneCompress,
+            "one-decompress" => Mode::OneDecompress,
             _ => panic!("Invalid mode"),
         }
     }
@@ -54,6 +58,14 @@ fn main() -> Result<()> {
         Mode::ZeroDekompress => {
             tracing::info!(target: "diff_cli", "Attempting to ZeroDekompress input bytes: {:?}", in_bytes);
             print!("{}", zero_kompressor::zero_dekompress(in_bytes)?);
+        }
+        Mode::OneCompress => {
+            tracing::info!(target: "diff_cli", "Attempting to OneCompress input bytes: {:?}", in_bytes);
+            print!("{}", one_compressor::compress(in_bytes)?);
+        }
+        Mode::OneDecompress => {
+            tracing::info!(target: "diff_cli", "Attempting to OneDecompress input bytes: {:?}", in_bytes);
+            print!("{}", one_compressor::decompress(in_bytes)?);
         }
     }
 

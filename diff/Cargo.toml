@@ -1,2 +1,2 @@
 [workspace]
-members = ["bin", "crates/zero-kompressor"]
+members = ["bin", "crates/zero-kompressor", "crates/one-compressor"]

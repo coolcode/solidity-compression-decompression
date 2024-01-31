@@ -14,6 +14,7 @@ anyhow = "1.0.70"
 
 # Local
 zero-kompressor = { path = "../crates/zero-kompressor" }
+one-compressor = { path = "../crates/one-compressor" }
 
 [[bin]]
 name = "diff"
