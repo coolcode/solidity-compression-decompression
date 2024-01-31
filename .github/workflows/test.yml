@@ -28,17 +28,17 @@ jobs:
         run: cargo build --all --release
         id: build-diff
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+  
       - name: Install deps (Node.js)
         working-directory: ./js
         run: pnpm install
