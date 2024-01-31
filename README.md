@@ -1,7 +1,9 @@
-# <h1 align="center"> Solidity Compression & Decompression </h1>
+# <h1 align="center"> Solidity Calldata Compression & Decompression </h1>
 
-![Rust CI](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/rust.yml/badge.svg)
-![Test CI](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/test.yml/badge.svg)
+![Rust](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/rust.yml/badge.svg)
+![Test](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/test.yml/badge.svg)
+
+Explore the world of Solidity calldata compression and decompression in this open-source project. This initiative aims to compare various compression methods, evaluating their effectiveness and performance.
 
 ## Getting Started
 
@@ -27,8 +29,7 @@ forge build
 forge test
 ```
 
-
-## Refs
+## References
 
 - [1inch Compression](https://github.com/1inch/calldata-compressor)
 - [ZeroKompressed](https://github.com/clabby/op-kompressor)

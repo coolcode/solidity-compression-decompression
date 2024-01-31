@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import { FFIHarness } from "./utils/FFIHarness.sol";
 import { MockDekompressor } from "src/mocks/MockDekompressor.sol";
 
-contract ZeroDekompressorLib_Test is FFIHarness {
+contract MockDekompressorTest is FFIHarness {
     MockDekompressor mockDekompressor;
 
     error InvalidInput();

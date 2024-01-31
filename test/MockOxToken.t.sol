@@ -3,18 +3,18 @@ pragma solidity ^0.8.20;
 
 import { console } from "forge-std/Test.sol";
 import { StringLib } from "src/lib/StringLib.sol";
-import { MockOneInchDecompressor } from "src/mocks/MockOneInchDecompressor.sol";
+import { MockOxToken } from "src/mocks/MockOxToken.sol";
 import { FFIHarness } from "./utils/FFIHarness.sol";
 
-contract OneInchDecompressorTest is FFIHarness {
+contract MockOxTokenTest is FFIHarness {
     using StringLib for bytes;
 
-    MockOneInchDecompressor decompressor;
+    MockOxToken decompressor;
     address alice = address(0xa);
     address bob = address(0xb);
 
     function setUp() public {
-        decompressor = new MockOneInchDecompressor();
+        decompressor = new MockOxToken();
         vm.deal(address(this), type(uint128).max);
         vm.deal(alice, 1 ether);
         decompressor.mint(alice, 1000e18);

@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import { FFIHarness } from "./utils/FFIHarness.sol";
 import { KomProxy } from "src/KomProxy.sol";
 
-contract KomProxy_Test is FFIHarness {
+contract KomProxyTest is FFIHarness {
     KomProxy proxy;
 
     /// @dev Thrown when a function equipped with the `onlyOwner` modifier is called by an account

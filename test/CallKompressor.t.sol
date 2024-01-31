@@ -5,7 +5,7 @@ import { FFIHarness } from "./utils/FFIHarness.sol";
 import { CallKompressor } from "src/CallKompressor.sol";
 
 /// @dev Tests for the `CallKompressor` contract.
-contract CallKompressor_Test is FFIHarness {
+contract CallKompressorTest is FFIHarness {
     CallKompressor solKompressor;
 
     function setUp() public {
