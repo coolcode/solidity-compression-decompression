@@ -2,7 +2,7 @@ const hre = require("hardhat")
 const { ethers } = hre
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers")
 const { expect } = require("chai")
-const { trim0x, ether } = require("./common")
+const { trim0x } = require("./common")
 const { compress } = require("./compressor")
 
 const CALLDATAS_LIMIT = 5
@@ -13,6 +13,10 @@ let popularCalldatas = []
 try {
   popularCalldatas = require(CALLDATAS_DICT)
 } catch (e) {}
+
+const ether = (text) => {
+  return ethers.parseEther(text)
+}
 
 function calldataCost(calldata) {
   const trimmed = trim0x(calldata)

@@ -1,4 +1,3 @@
-const { ethers } = require("hardhat")
 const { trim0x } = require("./common")
 
 class CompressDataDescription {
@@ -33,7 +32,7 @@ class Calldata {
   constructor(data, decompressorExtension) {
     data = trim0x(data)
     const dataTrim0 = data.replace(/^0+/, "").toLowerCase()
-    if (BigInt("0x" + data).toString(16) !== (dataTrim0 === "" ? "0" : dataTrim0)) {
+    if (BigInt(`0x${data}`).toString(16) !== (dataTrim0 === "" ? "0" : dataTrim0)) {
       throw Error("The data is not hexadecimal")
     }
     if (data.length % 2 !== 0) {
@@ -192,7 +191,7 @@ class Calldata {
   zip(instractions) {
     function scaleFraction(fraction) {
       if (fraction.length % 2 !== 0) {
-        fraction = "0" + fraction
+        return `0${fraction}`
       }
       return fraction
     }
@@ -275,7 +274,7 @@ class Calldata {
     }
 
     return {
-      uncompressedData: "0x" + this.data,
+      uncompressedData: `0x${this.data}`,
       compressedData: this.zip(bestCompressForFirstNBytes[this.bytesInfo.length - 1].description),
       ...bestCompressForFirstNBytes[this.bytesInfo.length - 1],
     }
@@ -291,9 +290,9 @@ class Calldata {
 
   async initDict(size, wallet) {
     this.dict = [
-      ethers.zeroPadValue(wallet.toLowerCase(), 32),
-      ethers.zeroPadValue((await this.contract.getAddress()).toLowerCase(), 32),
-      ...(await this.contract.getData(2, 2 + size)),
+      // ethers.zeroPadValue(wallet.toLowerCase(), 32),
+      // ethers.zeroPadValue((await this.contract.getAddress()).toLowerCase(), 32),
+      // ...(await this.contract.getData(2, 2 + size)),
     ]
     this.lookup = {}
     for (let i = 0; i < this.dict.length; i++) {

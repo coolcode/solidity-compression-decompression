@@ -25,4 +25,14 @@ contract FFIHarness is Test {
         commands[4] = "zero-dekompress";
         _out = vm.ffi(commands);
     }
+
+    function zipCompress(bytes memory _in) internal returns (bytes memory _out) {
+        string[] memory commands = new string[](5);
+        commands[0] = "node";
+        commands[1] = "js/cli.js";
+        commands[2] = "compress";
+        commands[3] = "-d";
+        commands[4] = vm.toString(_in);
+        _out = vm.ffi(commands);
+    }
 }
