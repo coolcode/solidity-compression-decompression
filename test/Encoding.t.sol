@@ -6,7 +6,7 @@ import { StringLib } from "src/lib/StringLib.sol";
 import { RLPLib } from "src/lib/RLPLib.sol";
 import { InflateLib } from "src/lib/InflateLib.sol";
 
-contract TestContract is Test {
+contract EncodingTest is Test {
     using StringLib for bytes;
     using RLPLib for bytes;
     using InflateLib for bytes;

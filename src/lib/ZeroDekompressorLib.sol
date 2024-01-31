@@ -10,6 +10,10 @@ library ZeroDekompressorLib {
     /// @notice Decodes ZeroKompressed calldata into memory.
     /// @return _out The uncompressed calldata in memory.
     function dekompressCalldata() internal pure returns (bytes memory _out) {
+        return dekompressCalldata(msg.data);
+    }
+
+    function dekompressCalldata(bytes calldata cd) internal pure returns (bytes memory _out) {
         assembly ("memory-safe") {
             // If the input is empty, return an empty output.
             // By default, `_out` is set to the zero offset (0x60), so we only branch once rather than creating a
@@ -23,7 +27,7 @@ library ZeroDekompressorLib {
 
                 // Loop through the calldata
                 for {
-                    let cdOffset := 0x00
+                    let cdOffset := cd.offset //0x00
                     let memOffset := add(_out, 0x20)
                 } lt(cdOffset, calldatasize()) { } {
                     // Load the current chunk

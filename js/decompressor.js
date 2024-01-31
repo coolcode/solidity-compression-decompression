@@ -227,6 +227,16 @@ const Decompressor = (contractName) => {
   })
 
   describe("Real-world", () => {
+    it("Compress", async () => {
+      const payload =
+        "0xa9059cbb000000000000000000000000000000000000000000000000000000000000000b0000000000000000000000000000000000000000000000000de0b6b3a7640000"
+      const compressed = await compress(payload)
+      const { decompressorExt } = await loadFixture(initContractsWithDictAndMint)
+      const decoded = await decompressorExt.decode(compressed.compressedData)
+      console.info("compressed:", compressed.compressedData)
+      console.info("decoded:", decoded)
+    })
+
     it("ERC20 transfer via decompressor", async () => {
       const { addr1, addr2, decompressorExt } = await loadFixture(initContractsWithDictAndMint)
 

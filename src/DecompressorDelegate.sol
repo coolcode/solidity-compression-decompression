@@ -18,6 +18,10 @@ abstract contract DecompressorDelegate {
         return _decompressed(msg.data[4:]);
     }
 
+    function decode(bytes calldata cd) public view returns (bytes memory raw) {
+        return _decompressed(cd);
+    }
+
     /**
      * @dev Calculates and returns the decompressed raw data from the compressed data passed as an argument.
      * @param cd The compressed data to be decompressed.
