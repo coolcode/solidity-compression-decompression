@@ -37,7 +37,7 @@ abstract contract FFIHarness is Test {
         console.log("[zipcompress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
         commands[0] = "node";
-        commands[1] = "js/cli.js";
+        commands[1] = "js/src/cli.js";
         commands[2] = "compress";
         commands[3] = "-d";
         commands[4] = vm.toString(_in);

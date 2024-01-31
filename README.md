@@ -4,24 +4,28 @@
 
 ## Getting Started
 
-You need rust
+rust build
 
 ```sh
 cd diff
 cargo build --release
 ```
 
+node.js build
+
+```sh
+cd js
+pnpm install
+pnpm test 0xa9059cbb000000000000000000000000000000000000000000000000000000000000000b0000000000000000000000000000000000000000000000000de0b6b3a7640000
+```
+
+forge build and test
+
 ```sh
 forge build
 forge test
 ```
 
-Use Hardhat:
-
-```sh
-pnpm install
-pnpm test
-```
 
 ## Refs
 

@@ -1,5 +1,5 @@
-CallKompressor_Test:testFuzz_forwardCallSol_succeeds(bytes,uint128) (runs: 10, μ: 178547, ~: 170089)
-DekompressorTokenTest:test_transfer_succeeds() (gas: 151365)
+CallKompressor_Test:testFuzz_forwardCallSol_succeeds(bytes,uint128) (runs: 10, μ: 175900, ~: 157568)
+DekompressorTokenTest:test_transfer_succeeds() (gas: 151369)
 EncodingTest:testAbiEncode() (gas: 1804369)
 EncodingTest:testFuzz(bytes) (runs: 10, μ: 3404, ~: 3404)
 EncodingTest:testHexEncode() (gas: 431013)

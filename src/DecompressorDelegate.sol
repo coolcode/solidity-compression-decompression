@@ -3,6 +3,29 @@
 pragma solidity ^0.8.20;
 
 abstract contract DecompressorDelegate {
+    // 0x97a65614
+    bytes4 constant DECOMPRESS_SELECTOR = this.decompress.selector; // bytes4(keccak256("decompress()"));
+
+    fallback() external {
+        bytes4 functionSelector;
+        assembly {
+            // Read the first 32 bytes of msg.data
+            let data := mload(0x40)
+            // Set functionSelector to the first four bytes
+            functionSelector := mload(add(data, 0x20))
+        }
+
+        // Check if the extracted function selector matches the expected selector
+        if (functionSelector == DECOMPRESS_SELECTOR) {
+            return;
+        }
+
+        bytes memory d = _decompressed(msg.data);
+        assembly {
+            return(add(d, 0x20), mload(d))
+        }
+    }
+
     /**
      * @dev Decompresses the compressed data (N bytes) passed to the function using the _delegatecall function.
      */

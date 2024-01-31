@@ -1,0 +1,13 @@
+{
+  "name": "compressor",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node src/cli.js compress -d",
+    "test:debug": "node src/cli.js compress -d 123456 --log debug"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "yargs": "^17.7.2"
+  }
+}

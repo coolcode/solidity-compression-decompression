@@ -5,7 +5,7 @@ import { Token } from "./Token.sol";
 import { OneInchDecompressor } from "src/OneInchDecompressor.sol";
 
 contract MockOneInchDecompressor is Token, OneInchDecompressor {
-    fallback() external { }
+    // fallback() external { }
 
     function setData(uint256 offset, bytes32 data) external onlyOwner {
         _setData(offset, data);
