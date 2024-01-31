@@ -1,8 +1,5 @@
 CallKompressorTest:testFuzz_forwardCallSol_succeeds(bytes,uint128) (runs: 10, μ: 70392, ~: 67013)
 CompressorTest:test_compress_decompress() (gas: 984539)
-EncodingTest:testAbiEncode() (gas: 1804369)
-EncodingTest:testFuzz(bytes) (runs: 10, μ: 3404, ~: 3404)
-EncodingTest:testHexEncode() (gas: 431013)
 KomProxyTest:test_fallback_succeeds(bytes,uint128) (runs: 10, μ: 41416, ~: 39734)
 KomProxyTest:test_transferOwnership_notOwner_reverts(address,address) (runs: 10, μ: 11300, ~: 11300)
 KomProxyTest:test_transferOwnership_succeeds(address) (runs: 10, μ: 17331, ~: 17331)
