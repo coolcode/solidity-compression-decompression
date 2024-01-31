@@ -1,6 +1,7 @@
 # <h1 align="center"> Solidity Compression & Decompression </h1>
 
-![Github Actions](https://github.com/coolcode/solidity-compression-decompression/workflows/CI/badge.svg)
+![Rust CI](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/rust.yml/badge.svg)
+![Test CI](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/test.yml/badge.svg)
 
 ## Getting Started
 
