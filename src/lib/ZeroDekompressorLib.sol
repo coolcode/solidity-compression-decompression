@@ -7,6 +7,10 @@ library ZeroDekompressorLib {
     /// @dev Thrown when the calldata is not correctly encoded.
     error InvalidInput();
 
+    function dekompress(bytes calldata cd) external pure returns (bytes memory _out) {
+        return dekompressCalldata(cd);
+    }
+
     /// @notice Decodes ZeroKompressed calldata into memory.
     /// @return _out The uncompressed calldata in memory.
     function dekompressCalldata() internal pure returns (bytes memory _out) {
@@ -42,12 +46,12 @@ library ZeroDekompressorLib {
                         // Perform a positive lookahead to determine the length of the zeros run.
                         let b2 := byte(0x01, chunk)
 
-                        if iszero(b2) {
-                            // Store the `InvalidInput()` selector in memory
-                            mstore(0x00, 0xb4fa3fb3)
-                            // Revert with the `InvalidInput()` selector
-                            revert(0x1c, 0x04)
-                        }
+                        // if iszero(b2) {
+                        //     // Store the `InvalidInput()` selector in memory
+                        //     mstore(0x00, 0xb4fa3fb3)
+                        //     // Revert with the `InvalidInput()` selector
+                        //     revert(0x1c, 0x04)
+                        // }
 
                         // Increment the calldata offset by 2 bytes to account for the RLE postfix and the zero byte.
                         cdOffset := add(cdOffset, 0x02)

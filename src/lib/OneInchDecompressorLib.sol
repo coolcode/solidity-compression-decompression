@@ -13,7 +13,7 @@ library OneInchDecompressorLib {
      * @param cd The compressed data to be decompressed.
      * @return raw The decompressed raw data.
      */
-    function decompress(bytes calldata cd) internal view returns (bytes memory raw) {
+    function decompress(bytes calldata cd) external view returns (bytes memory raw) {
         assembly ("memory-safe") {
             // solhint-disable-line no-inline-assembly
             raw := mload(0x40)

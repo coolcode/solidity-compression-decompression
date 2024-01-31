@@ -9,7 +9,7 @@ abstract contract FFIHarness is Test {
 
     /// @dev ZeroKompresses the given bytes using the Rust sidecar.
     function zeroKompress(bytes memory _in) internal returns (bytes memory _out) {
-        console.log("[kompress] in: ", _in.toHex());
+        // console.log("[kompress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
         commands[0] = "./diff/target/release/diff";
         commands[1] = "--in-bytes";
@@ -17,12 +17,12 @@ abstract contract FFIHarness is Test {
         commands[3] = "--mode";
         commands[4] = "zero-kompress";
         _out = vm.ffi(commands);
-        console.log("[kompress] out:", _out.toHex());
+        // console.log("[kompress] out:", _out.toHex());
     }
 
     /// @dev ZeroDekompresses the given bytes using the Rust sidecar.
     function zeroDekompress(bytes memory _in) internal returns (bytes memory _out) {
-        console.log("[dekompress] in: ", _in.toHex());
+        // console.log("[dekompress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
         commands[0] = "./diff/target/release/diff";
         commands[1] = "--in-bytes";
@@ -30,11 +30,11 @@ abstract contract FFIHarness is Test {
         commands[3] = "--mode";
         commands[4] = "zero-dekompress";
         _out = vm.ffi(commands);
-        console.log("[dekompress] out:", _out.toHex());
+        // console.log("[dekompress] out:", _out.toHex());
     }
 
     function zipCompress(bytes memory _in) internal returns (bytes memory _out) {
-        console.log("[zipcompress] in: ", _in.toHex());
+        // console.log("[compress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
         commands[0] = "node";
         commands[1] = "js/src/cli.js";
@@ -42,6 +42,6 @@ abstract contract FFIHarness is Test {
         commands[3] = "-d";
         commands[4] = vm.toString(_in);
         _out = vm.ffi(commands);
-        console.log("[zipcompress] out:", _out.toHex());
+        // console.log("[compress] out:", _out.toHex());
     }
 }
