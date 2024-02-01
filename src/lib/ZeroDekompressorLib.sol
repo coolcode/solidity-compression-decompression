@@ -69,7 +69,6 @@ library ZeroDekompressorLib {
     }
 
     function dekompressCalldata(bytes calldata cd) internal pure returns (bytes memory _out) {
-        uint256 len = cd.length;
         assembly ("memory-safe") {
             // If the input is empty, return an empty output.
             // By default, `_out` is set to the zero offset (0x60), so we only branch once rather than creating a
