@@ -3,11 +3,14 @@ pragma solidity ^0.8.20;
 
 import { console } from "forge-std/Test.sol";
 import { StringLib } from "src/lib/StringLib.sol";
-import { FFIHarness } from "./utils/FFIHarness.sol";
+import { ZeroDekompressorLib } from "src/lib/ZeroDekompressorLib.sol";
 import { MockDekompressor } from "src/mocks/MockDekompressor.sol";
+import { FFIHarness } from "./utils/FFIHarness.sol";
 
 contract MockDekompressorTest is FFIHarness {
     using StringLib for bytes;
+    using ZeroDekompressorLib for bytes;
+
     MockDekompressor mockDekompressor;
 
     error InvalidInput();
@@ -83,11 +86,25 @@ contract MockDekompressorTest is FFIHarness {
     }
 
     /// @dev Differential test for dekompression against the Rust implementation
-    function testDiff_dekompress(bytes memory _toCompress) public {
+    function test_diff_dekompress(bytes memory _toCompress) public {
         bytes memory compressed = zeroKompress(_toCompress);
 
         (bool success, bytes memory returndata) = address(mockDekompressor).call(compressed);
         assertTrue(success);
         assertEq(returndata, zeroDekompress(compressed), "diff");
+    }
+
+    function test_approve_dekompress() public {
+        bytes memory _toCompress =
+            hex"a9059cbb000000000000000000000000000000000000000000000000000000000000000b0000000000000000000000000000000000000000000000000de0b6b3a7640000";
+        bytes memory compressed = zeroKompress(_toCompress);
+        assertEq(compressed, hex"a9059cbb001f0b00180de0b6b3a7640002", "compressed");
+        // 0xa9059cbb001f0b00180de0b6b3a7640002
+
+        (bool success, bytes memory returndata) = address(mockDekompressor).call(compressed);
+        assertTrue(success);
+        assertEq(returndata, zeroDekompress(compressed), "diff");
+        bytes memory decompressed = compressed.dekompress();
+        assertEq(returndata, decompressed, "lib");
     }
 }

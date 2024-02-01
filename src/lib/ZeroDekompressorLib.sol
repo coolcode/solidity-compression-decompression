@@ -5,10 +5,10 @@ pragma solidity ^0.8.20;
 /// @author clabby <https://github.com/clabby>
 library ZeroDekompressorLib {
     /// @dev Thrown when the calldata is not correctly encoded.
-    error InvalidInput(uint16);
+    error InvalidInput();
 
     function dekompress(bytes calldata cd) external pure returns (bytes memory _out) {
-        return dekompressCalldata(cd);
+        return dekompressCalldata1(cd);
     }
 
     /// @notice Decodes ZeroKompressed calldata into memory.
@@ -17,7 +17,7 @@ library ZeroDekompressorLib {
         return dekompressCalldata(msg.data);
     }
 
-    function dekompressCalldata(bytes calldata cd) internal pure returns (bytes memory _out) {
+    function dekompressCalldata1(bytes calldata cd) internal pure returns (bytes memory _out) {
         // If the input is empty, return an empty output.
         if (cd.length == 0) {
             return new bytes(0);
@@ -43,16 +43,15 @@ library ZeroDekompressorLib {
 
                 if (b2 == 0) {
                     // Revert with the `InvalidInput()` selector
-                    revert("InvalidInput");
+                    revert InvalidInput();
                 }
                 // Increment the output length by `b2` bytes.
                 outLength += b2;
-                // }
 
                 // Increment the calldata offset by 2 bytes to account for the RLE postfix and the zero byte.
                 cdOffset += 2;
             } else {
-                // Store the non-zero byte in memory at the current offset 
+                // Store the non-zero byte in memory at the current offset
                 _out[outLength] = bytes1(b1);
 
                 // Increment the calldata offset by 1 byte to account for the non-zero byte.
@@ -65,12 +64,12 @@ library ZeroDekompressorLib {
         // Set the length of the output to the calculated length
         assembly {
             // trim
-            mstore(_out, outLength) 
+            mstore(_out, outLength)
             // mstore(_out, add(_out, 0x20))
         }
     }
 
-    function dekompressCalldata2(bytes calldata cd) internal pure returns (bytes memory _out) {
+    function dekompressCalldata(bytes calldata cd) internal pure returns (bytes memory _out) {
         assembly ("memory-safe") {
             // If the input is empty, return an empty output.
             // By default, `_out` is set to the zero offset (0x60), so we only branch once rather than creating a

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "node src/cli.js compress -d",
-    "test:debug": "node src/cli.js compress -d 123456 --log debug"
+    "compress": "node src/cli.js compress -d",
+    "test": "node src/cli.js compress -d 123456 --log debug"
   },
   "license": "MIT",
   "devDependencies": {
