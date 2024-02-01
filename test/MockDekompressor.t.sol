@@ -65,18 +65,18 @@ contract MockDekompressorTest is FFIHarness {
     }
 
     /// @dev Tests that the `dekompressCalldata` function reverts if the input is invalid
-    // function test_invalidInput_reverts() public {
-    //     (bool success, bytes memory returndata) = address(mockDekompressor).call(hex"ff00");
-    //     assertTrue(!success);
+    function test_invalidInput_reverts() public {
+        (bool success, bytes memory returndata) = address(mockDekompressor).call(hex"ff00");
+        assertFalse(success);
 
-    //     bytes memory expectedReturndata = abi.encode(InvalidInput.selector);
-    //     assembly ("memory-safe") {
-    //         // Set the length of the expected returndata to 4.
-    //         mstore(expectedReturndata, 0x04)
-    //     }
+        bytes memory expectedReturndata = abi.encode(InvalidInput.selector);
+        assembly ("memory-safe") {
+            // Set the length of the expected returndata to 4.
+            mstore(expectedReturndata, 0x04)
+        }
 
-    //     assertEq(returndata, expectedReturndata);
-    // }
+        assertEq(returndata, expectedReturndata);
+    }
 
     /// @dev Differential test for dekompression against the Rust implementation
     function testDiff_dekompress(bytes memory _toCompress) public {
@@ -84,6 +84,6 @@ contract MockDekompressorTest is FFIHarness {
 
         (bool success, bytes memory returndata) = address(mockDekompressor).call(compressed);
         assertTrue(success);
-        assertEq(returndata, zeroDekompress(compressed));
+        assertEq(returndata, zeroDekompress(compressed), "diff");
     }
 }

@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          
+          cache: "pnpm"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -44,6 +44,7 @@ jobs:
         run: pnpm install
 
       - name: Run tests (Node.js)
+        working-directory: ./js
         run: pnpm test
 
       - name: Install Foundry
