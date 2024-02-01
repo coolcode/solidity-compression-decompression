@@ -96,10 +96,9 @@ contract MockDekompressorTest is FFIHarness {
 
     function test_approve_dekompress() public {
         bytes memory _toCompress =
-            hex"a9059cbb000000000000000000000000000000000000000000000000000000000000000b0000000000000000000000000000000000000000000000000de0b6b3a7640000";
+            hex"000000000000000000000000000000000000000000000000000000000000000b0000000000000000000000000000000000000000000000000de0b6b3a7640000";
         bytes memory compressed = zeroKompress(_toCompress);
-        assertEq(compressed, hex"a9059cbb001f0b00180de0b6b3a7640002", "compressed");
-        // 0xa9059cbb001f0b00180de0b6b3a7640002
+        assertEq(compressed, hex"001f0b00180de0b6b3a7640002", "compressed");
 
         (bool success, bytes memory returndata) = address(mockDekompressor).call(compressed);
         assertTrue(success);

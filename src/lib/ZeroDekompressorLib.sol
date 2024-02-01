@@ -8,7 +8,7 @@ library ZeroDekompressorLib {
     error InvalidInput();
 
     function dekompress(bytes calldata cd) external pure returns (bytes memory _out) {
-        return dekompressCalldata1(cd);
+        return dekompressCalldata(cd);
     }
 
     /// @notice Decodes ZeroKompressed calldata into memory.
@@ -17,7 +17,7 @@ library ZeroDekompressorLib {
         return dekompressCalldata(msg.data);
     }
 
-    function dekompressCalldata1(bytes calldata cd) internal pure returns (bytes memory _out) {
+    function dekompressCalldata_fixed(bytes calldata cd) internal pure returns (bytes memory _out) {
         // If the input is empty, return an empty output.
         if (cd.length == 0) {
             return new bytes(0);
@@ -38,7 +38,6 @@ library ZeroDekompressorLib {
             // Otherwise, copy the byte as normal.
             if (b1 == 0) {
                 // Perform a positive lookahead to determine the length of the zeros run.
-                // if ((cdOffset + 1) < cd.length) {
                 uint8 b2 = uint8(cd[cdOffset + 1]);
 
                 if (b2 == 0) {
@@ -70,6 +69,7 @@ library ZeroDekompressorLib {
     }
 
     function dekompressCalldata(bytes calldata cd) internal pure returns (bytes memory _out) {
+        uint256 len = cd.length;
         assembly ("memory-safe") {
             // If the input is empty, return an empty output.
             // By default, `_out` is set to the zero offset (0x60), so we only branch once rather than creating a
@@ -82,10 +82,11 @@ library ZeroDekompressorLib {
                 let outLength := 0x00
 
                 // Loop through the calldata
+                let end := add(cd.offset, cd.length)
                 for {
                     let cdOffset := cd.offset //0x00
                     let memOffset := add(_out, 0x20)
-                } lt(cdOffset, calldatasize()) { } {
+                } lt(cdOffset, end) { } {
                     // Load the current chunk
                     let chunk := calldataload(cdOffset)
                     // Load the first byte of the current chunk
@@ -101,6 +102,9 @@ library ZeroDekompressorLib {
                         if iszero(b2) {
                             // Store the `InvalidInput()` selector in memory
                             mstore(0x00, 0xb4fa3fb3)
+                            // mstore(0x00, add(0xff000000, cdOffset))
+                            // mstore(0x00, add(0xff000000, chunk))
+
                             // Revert with the `InvalidInput()` selector
                             revert(0x1c, 0x04)
 
