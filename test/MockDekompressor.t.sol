@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import { console } from "forge-std/Test.sol";
+import { StringLib } from "src/lib/StringLib.sol";
 import { FFIHarness } from "./utils/FFIHarness.sol";
 import { MockDekompressor } from "src/mocks/MockDekompressor.sol";
 
 contract MockDekompressorTest is FFIHarness {
+    using StringLib for bytes;
     MockDekompressor mockDekompressor;
 
     error InvalidInput();
@@ -67,6 +70,7 @@ contract MockDekompressorTest is FFIHarness {
     /// @dev Tests that the `dekompressCalldata` function reverts if the input is invalid
     function test_invalidInput_reverts() public {
         (bool success, bytes memory returndata) = address(mockDekompressor).call(hex"ff00");
+        console.log("invalid input -> returndata: %s", returndata.toHex());
         assertFalse(success);
 
         bytes memory expectedReturndata = abi.encode(InvalidInput.selector);
