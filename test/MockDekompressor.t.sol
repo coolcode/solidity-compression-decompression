@@ -69,7 +69,7 @@ contract MockDekompressorTest is FFIHarness {
 
     /// @dev Tests that the `dekompressCalldata` function reverts if the input is invalid
     function test_invalidInput_reverts() public {
-        (bool success, bytes memory returndata) = address(mockDekompressor).call(hex"ff00");
+        (bool success, bytes memory returndata) = address(mockDekompressor).call(hex"ff0000");
         console.log("invalid input -> returndata: %s", returndata.toHex());
         assertFalse(success);
 
