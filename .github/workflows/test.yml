@@ -1,5 +1,11 @@
 name: Test CI
-on: [push]
+on:
+  push:
+    paths:
+      - diff/**
+      - js/**
+      - src/**
+      - test/**
 
 env:
   FOUNDRY_PROFILE: ci
