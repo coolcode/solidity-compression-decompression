@@ -1,6 +1,7 @@
 # <h1 align="center"> Solidity Calldata Compression & Decompression </h1>
 
 ![Rust](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/rust.yml/badge.svg)
+![Node](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/node.yml/badge.svg)
 ![Test](https://github.com/coolcode/solidity-compression-decompression/actions/workflows/test.yml/badge.svg)
 
 Explore the world of Solidity calldata compression and decompression in this open-source project. This initiative aims to compare various compression methods, evaluating their effectiveness and performance.
