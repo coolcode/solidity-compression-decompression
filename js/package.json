@@ -4,10 +4,12 @@
   "description": "",
   "scripts": {
     "compress": "node src/cli.js compress -d",
-    "test": "node src/cli.js compress -d 123456 --log debug"
+    "sample": "node src/cli.js compress -d 123456 --log debug",
+    "test": "vitest"
   },
   "license": "MIT",
   "devDependencies": {
+    "vitest": "^1.2.2",
     "yargs": "^17.7.2"
   }
 }
