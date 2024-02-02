@@ -11,7 +11,7 @@ Explore the world of Solidity calldata compression and decompression in this ope
 rust build
 
 ```sh
-cd diff
+cd rust
 cargo build --release
 ```
 

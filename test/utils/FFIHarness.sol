@@ -11,7 +11,7 @@ abstract contract FFIHarness is Test {
     function zeroKompress(bytes memory _in) internal returns (bytes memory _out) {
         // console.log("[kompress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
-        commands[0] = "./diff/target/release/diff";
+        commands[0] = "./rust/target/release/diff";
         commands[1] = "--in-bytes";
         commands[2] = vm.toString(_in);
         commands[3] = "--mode";
@@ -24,7 +24,7 @@ abstract contract FFIHarness is Test {
     function zeroDekompress(bytes memory _in) internal returns (bytes memory _out) {
         // console.log("[dekompress] in: ", _in.toHex());
         string[] memory commands = new string[](5);
-        commands[0] = "./diff/target/release/diff";
+        commands[0] = "./rust/target/release/diff";
         commands[1] = "--in-bytes";
         commands[2] = vm.toString(_in);
         commands[3] = "--mode";

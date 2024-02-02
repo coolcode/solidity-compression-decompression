@@ -2,12 +2,12 @@ name: Rust CI
 on: 
   push:
     paths:
-      - diff/**
+      - rust/**
 
 defaults:
   run:
     shell: bash
-    working-directory: diff
+    working-directory: rust
 
 jobs:
   cargo-tests:
@@ -27,6 +27,7 @@ jobs:
           cache-on-failure: true
       - name: cargo test
         run: cargo test --all --all-features
+        
   # cargo-lint:
   #   runs-on: ubuntu-latest
   #   timeout-minutes: 20

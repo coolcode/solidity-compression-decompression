@@ -32,8 +32,8 @@ class CompressData {
 }
 
 class Calldata {
-  constructor(data) {
-    data = trim0x(data)
+  constructor(calldata) {
+    const data = trim0x(calldata)
     const dataTrim0 = data.replace(/^0+/, "").toLowerCase()
     if (BigInt(`0x${data}`).toString(16) !== (dataTrim0 === "" ? "0" : dataTrim0)) {
       throw Error("The data is not hexadecimal")
@@ -232,7 +232,7 @@ class Calldata {
           result += scaleFraction(BigInt(index + 3 * 2 ** 22 + BB.indexOf(instractions[i].amountBytes) * 2 ** 20).toString(16))
           break
         default:
-          throw Error("Unsupported method: " + instractions[i].method)
+          throw Error(`Unsupported method: ${instractions[i].method}`)
       }
     }
     return result
