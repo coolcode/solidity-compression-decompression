@@ -10,31 +10,31 @@ defaults:
     working-directory: rust
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          target: x86_64-unknown-linux-musl
+      # - name: Install Rust
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+      #     override: true
+      #     target: x86_64-unknown-linux-musl
 
-      - name: Configure sccache env var and set build profile to ephemeral build
-        run: |
-          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
-          echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
-          echo "RUSTFLAGS='--cfg profile=ephemeral-build'" >> $GITHUB_ENV
+      # - name: Configure sccache env var and set build profile to ephemeral build
+      #   run: |
+      #     echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
+      #     echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+      #     echo "RUSTFLAGS='--cfg profile=ephemeral-build'" >> $GITHUB_ENV
 
-      - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.4
+      # - name: Run sccache-cache
+      #   uses: mozilla-actions/sccache-action@v0.0.4
 
-      - name: Run test
-        run: cargo test
+      # - name: Run test
+      #   run: cargo test
 
       # - name: Run build
       #   uses: actions-rs/cargo@v1 
@@ -47,23 +47,23 @@ jobs:
       #   with:
       #     command: test
 
-  # cargo-tests:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 20
-  #   steps:
-  #     - name: Checkout sources
-  #       uses: actions/checkout@v3
-  #     - name: Install Rust toolchain
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #         profile: minimal
-  #         override: true
-  #     - uses: Swatinem/rust-cache@v2.7.2
-  #       with:
-  #         cache-on-failure: true
-  #     - name: cargo test
-  #       run: cargo test --all --all-features
+  cargo-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - uses: Swatinem/rust-cache@v2.7.2
+        with:
+          cache-on-failure: true
+      - name: cargo test
+        run: cargo test --all --all-features
 
   # cargo-lint:
   #   runs-on: ubuntu-latest
