@@ -5,7 +5,8 @@
   "scripts": {
     "compress": "node src/cli.js compress -d",
     "sample": "node src/cli.js compress -d 123456 --log debug",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "license": "MIT",
   "devDependencies": {
